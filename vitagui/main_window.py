@@ -9,8 +9,8 @@ Created on Thu Dec 12 14:30:31 2019
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QMainWindow, QWidget, QMenu, QMessageBox,
                              QVBoxLayout, QDockWidget, QTreeWidget)
-from matplotlib_widget import staticMplCanvas
-from widget_input import WidgetInput
+from vitagui.matplotlib_widget import staticMplCanvas
+from vitagui.widget_input import WidgetInput
 
 class MainWindow(QMainWindow):
     def __init__(self):

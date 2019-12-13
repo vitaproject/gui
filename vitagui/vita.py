@@ -44,14 +44,17 @@ import argparse
 # import pandas as pd
 from PyQt5 import QtWidgets
 
-from main_window import MainWindow
+import vita.utility.resource_manager as rm
+from vitagui.main_window import MainWindow
 
 progname = os.path.basename(sys.argv[0])
 progversion = "0.1"
 
 
 
-if __name__ == "__main__":
+def main():
+    options = rm.list_resources()
+    print(options)
     options = argparse.ArgumentParser()
     options.add_argument("-f", "--file", type=str, required=False)
     args = options.parse_args()
@@ -64,3 +67,6 @@ if __name__ == "__main__":
     vitawindow.setWindowTitle("%s" % progname)
     vitawindow.show()
     sys.exit(qApp.exec_())
+
+if __name__ == '__main__':
+    main()
