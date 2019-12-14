@@ -41,13 +41,29 @@ class WidgetInput(QWidget):
         self.setWindowTitle("Input data")
 
         self.workflowComboBox.activated[str].connect(self.changeWorkflow)
-        self.machineComboBox.activated[str].connect(self.changeWorkflow)
+        self.machineComboBox.activated[str].connect(self.changeMachine)
         self.equilibriumButton1.toggled.connect(self.toggleEquilibriumStatic)
         self.equilibriumButton2.toggled.connect(self.toggleEquilibriumSweeping)
         self.equilibriumButton3.toggled.connect(self.toggleEquilibriumMultiple)
 
+    def setResources(self, inputResources):
+        self.machineComboBox.addItems(inputResources['machines'])
+        self.equilibrium_dict = inputResources['equilibrium']
+        self.equilibriumComboBox.clear()
+        self.equilibriumComboBox.addItems(self.equilibrium_dict
+                                          [self.machineComboBox.currentText()])
+
+    def setData(self, inputData):
+        self.data = inputData
+
     def changeWorkflow(self, styleName):
-        print("Workflow set to", self.workflowComboBox.Text)
+        print("Workflow set to", self.workflowComboBox.currentText())
+        
+    def changeMachine(self, styleName):
+        print("Machine set to", self.machineComboBox.currentText())
+        self.equilibriumComboBox.clear()
+        self.equilibriumComboBox.addItems(self.equilibrium_dict
+                                          [self.machineComboBox.currentText()])
         
     def toggleEquilibriumStatic(self, state=0):
         print("Equilibrium static set to", state)
@@ -85,7 +101,7 @@ class WidgetInput(QWidget):
         self.workflowLabel.setBuddy(self.workflowComboBox)
 
         self.machineComboBox = QComboBox()
-        self.machineComboBox.addItems(["ST40_P3", "ST140"])
+        # self.machineComboBox.addItems(["ST40_P3", "ST140"])
         self.machineLabel = QLabel("&Machine settings:")
         self.machineLabel.setBuddy(self.machineComboBox)
 
@@ -108,7 +124,7 @@ class WidgetInput(QWidget):
         self.equilibriumButton1.setChecked(True)
 
         self.equilibriumComboBox = QComboBox()
-        self.equilibriumComboBox.addItems(["eq002", "eq003"])
+        # self.equilibriumComboBox.addItems(["eq002", "eq003"])
         self.equilibriumLabel = QLabel("&Equilibrium file:")
         self.equilibriumLabel.setBuddy(self.equilibriumComboBox)
         
@@ -140,21 +156,33 @@ class WidgetInput(QWidget):
     def createTopRightGroupBox(self):
         self.topRightGroupBox = QGroupBox("SOL parameters")
 
-        self.plotPushButton = QPushButton("Default Push Button")
-        self.plotPushButton.setDefault(True)
+        lineEdit = QLineEdit('s3cRe7')
+        lineEdit.setEchoMode(QLineEdit.Password)
 
-        togglePushButton = QPushButton("Toggle Push Button")
-        togglePushButton.setCheckable(True)
-        togglePushButton.setChecked(True)
+        spinBox = QSpinBox(self.topRightGroupBox)
+        spinBox.setValue(50)
 
-        flatPushButton = QPushButton("Flat Push Button")
-        flatPushButton.setFlat(True)
+        dateTimeEdit = QDateTimeEdit(self.topRightGroupBox)
+        dateTimeEdit.setDateTime(QDateTime.currentDateTime())
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.plotPushButton)
-        layout.addWidget(togglePushButton)
-        layout.addWidget(flatPushButton)
-        layout.addStretch(1)
+        slider = QSlider(Qt.Horizontal, self.topRightGroupBox)
+        slider.setValue(40)
+
+        scrollBar = QScrollBar(Qt.Horizontal, self.topRightGroupBox)
+        scrollBar.setValue(60)
+
+        dial = QDial(self.topRightGroupBox)
+        dial.setValue(30)
+        dial.setNotchesVisible(True)
+
+        layout = QGridLayout()
+        layout.addWidget(lineEdit, 0, 0, 1, 2)
+        layout.addWidget(spinBox, 1, 0, 1, 2)
+        layout.addWidget(dateTimeEdit, 2, 0, 1, 2)
+        layout.addWidget(slider, 3, 0)
+        layout.addWidget(scrollBar, 4, 0)
+        layout.addWidget(dial, 3, 1, 2, 1)
+        layout.setRowStretch(5, 1)
         self.topRightGroupBox.setLayout(layout)
 
     def createBottomLeftTabWidget(self):
@@ -189,37 +217,25 @@ class WidgetInput(QWidget):
         self.bottomLeftTabWidget.addTab(tab2, "Text &Edit")
 
     def createBottomRightGroupBox(self):
+        self.plotPushButton = QPushButton("Default Push Button")
+        self.plotPushButton.setDefault(True)
+
+        togglePushButton = QPushButton("Toggle Push Button")
+        togglePushButton.setCheckable(True)
+        togglePushButton.setChecked(True)
+
+        flatPushButton = QPushButton("Flat Push Button")
+        flatPushButton.setFlat(True)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.plotPushButton)
+        layout.addWidget(togglePushButton)
+        layout.addWidget(flatPushButton)
+        layout.addStretch(1)
+
         self.bottomRightGroupBox = QGroupBox("Group 3")
         self.bottomRightGroupBox.setCheckable(True)
         self.bottomRightGroupBox.setChecked(True)
-
-        lineEdit = QLineEdit('s3cRe7')
-        lineEdit.setEchoMode(QLineEdit.Password)
-
-        spinBox = QSpinBox(self.bottomRightGroupBox)
-        spinBox.setValue(50)
-
-        dateTimeEdit = QDateTimeEdit(self.bottomRightGroupBox)
-        dateTimeEdit.setDateTime(QDateTime.currentDateTime())
-
-        slider = QSlider(Qt.Horizontal, self.bottomRightGroupBox)
-        slider.setValue(40)
-
-        scrollBar = QScrollBar(Qt.Horizontal, self.bottomRightGroupBox)
-        scrollBar.setValue(60)
-
-        dial = QDial(self.bottomRightGroupBox)
-        dial.setValue(30)
-        dial.setNotchesVisible(True)
-
-        layout = QGridLayout()
-        layout.addWidget(lineEdit, 0, 0, 1, 2)
-        layout.addWidget(spinBox, 1, 0, 1, 2)
-        layout.addWidget(dateTimeEdit, 2, 0, 1, 2)
-        layout.addWidget(slider, 3, 0)
-        layout.addWidget(scrollBar, 4, 0)
-        layout.addWidget(dial, 3, 1, 2, 1)
-        layout.setRowStretch(5, 1)
         self.bottomRightGroupBox.setLayout(layout)
 
     def createProgressBar(self):

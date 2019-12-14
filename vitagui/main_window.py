@@ -50,6 +50,13 @@ modified versions may be distributed under the LGPL license.
 
 Checkout the Github repository at www.github.com/vitaproject"""
                                 )
+        
+    def setResources(self,inputResources):
+        self.inputWidget.setResources(inputResources)
+        
+    def setInputFile(self,inputData):
+        self.inputWidget.setData(inputData)
+    
     def setInitialLayout(self):
         self.inputWidget = WidgetInput()
 

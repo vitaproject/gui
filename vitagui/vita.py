@@ -41,6 +41,8 @@
 import os
 import sys
 import argparse
+import json
+
 # import pandas as pd
 from PyQt5 import QtWidgets
 
@@ -53,18 +55,29 @@ progversion = "0.1"
 
 
 def main():
-    options = rm.list_resources()
-    print(options)
-    options = argparse.ArgumentParser()
-    options.add_argument("-f", "--file", type=str, required=False)
-    args = options.parse_args()
-    # data = read_data(args.file)
-
+    resources = rm.list_resources()
+    print(resources)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file", type=str, required=False)
+    args = parser.parse_args()
+    if args.file:
+        input_file = args.file
+        print("Opening file", input_file)
+    elif os.path.isfile(resources['path']+'/default.json'):
+        input_file = resources['path']+'/default.json'
+        print ("Opening file", input_file)
+        
     # Qt Application
     qApp = QtWidgets.QApplication(sys.argv)
     
     vitawindow = MainWindow()
     vitawindow.setWindowTitle("%s" % progname)
+    vitawindow.setResources(resources)
+    if input_file:
+        with open(input_file, 'r') as fh:
+            vita_input = json.load(fh)
+        print(vita_input)
+        vitawindow.setInputFile(vita_input)
     vitawindow.show()
     sys.exit(qApp.exec_())
 
