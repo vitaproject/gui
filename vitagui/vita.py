@@ -56,7 +56,7 @@ progversion = "0.1"
 
 def main():
     resources = rm.list_resources()
-    print(resources)
+    # print(resources)
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", type=str, required=False)
     args = parser.parse_args()
@@ -76,7 +76,6 @@ def main():
     if input_file:
         with open(input_file, 'r') as fh:
             vita_input = json.load(fh)
-        print(vita_input)
         vitawindow.setInputFile(vita_input)
     vitawindow.show()
     sys.exit(qApp.exec_())

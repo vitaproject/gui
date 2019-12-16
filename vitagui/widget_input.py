@@ -52,9 +52,12 @@ class WidgetInput(QWidget):
         self.equilibriumComboBox.clear()
         self.equilibriumComboBox.addItems(self.equilibrium_dict
                                           [self.machineComboBox.currentText()])
+        self.textEditResources.setPlainText(str(inputResources))
 
     def setData(self, inputData):
         self.data = inputData
+        self.textEditData.setPlainText(str(self.data))
+
 
     def changeWorkflow(self, styleName):
         print("Workflow set to", self.workflowComboBox.currentText())
@@ -156,65 +159,100 @@ class WidgetInput(QWidget):
     def createTopRightGroupBox(self):
         self.topRightGroupBox = QGroupBox("SOL parameters")
 
-        lineEdit = QLineEdit('s3cRe7')
-        lineEdit.setEchoMode(QLineEdit.Password)
-
-        spinBox = QSpinBox(self.topRightGroupBox)
-        spinBox.setValue(50)
-
-        dateTimeEdit = QDateTimeEdit(self.topRightGroupBox)
-        dateTimeEdit.setDateTime(QDateTime.currentDateTime())
-
-        slider = QSlider(Qt.Horizontal, self.topRightGroupBox)
-        slider.setValue(40)
-
-        scrollBar = QScrollBar(Qt.Horizontal, self.topRightGroupBox)
-        scrollBar.setValue(60)
-
-        dial = QDial(self.topRightGroupBox)
-        dial.setValue(30)
-        dial.setNotchesVisible(True)
+        topRightGroupBoxLambda = QGroupBox("Lambda_q (mm)")
+        # self.lambdaLabel = QLabel("&Lambda_q (mm):")
+        self.mmButton = QRadioButton("MM 2011")
+        self.mmDSB = QDoubleSpinBox()
+        self.eichButton = QRadioButton("Eich #15")
+        self.eichDSB = QDoubleSpinBox()
+        self.lambdaManualButton = QRadioButton("Manual")
+        self.lambdaManualDSB = QDoubleSpinBox()
+        self.lambdaManualButton.setChecked(True)
 
         layout = QGridLayout()
-        layout.addWidget(lineEdit, 0, 0, 1, 2)
-        layout.addWidget(spinBox, 1, 0, 1, 2)
-        layout.addWidget(dateTimeEdit, 2, 0, 1, 2)
-        layout.addWidget(slider, 3, 0)
-        layout.addWidget(scrollBar, 4, 0)
-        layout.addWidget(dial, 3, 1, 2, 1)
-        layout.setRowStretch(5, 1)
+        # layout.addWidget(self.lambdaLabel,       0, 0, 1, 2)
+        layout.addWidget(self.mmButton,          1, 0)
+        layout.addWidget(self.mmDSB,             1, 1)
+        layout.addWidget(self.eichButton,        2, 0)
+        layout.addWidget(self.eichDSB,           2, 1)
+        layout.addWidget(self.lambdaManualButton,3, 0)
+        layout.addWidget(self.lambdaManualDSB,   3, 1)
+        topRightGroupBoxLambda.setLayout(layout)
+
+        topRightGroupBoxS = QGroupBox("S (mm)")
+        # self.sLabel = QLabel("&S (mm):")
+        self.makowskiButton = QRadioButton("Eich #15")
+        self.makowskiDSB = QDoubleSpinBox()
+        self.sManualButton = QRadioButton("Manual")
+        self.sManualDSB = QDoubleSpinBox()
+
+        layout = QGridLayout()
+        # layout.addWidget(self.sLabel,            4, 0, 1, 2)
+        layout.addWidget(self.makowskiButton,    5, 0)
+        layout.addWidget(self.makowskiDSB,       5, 1)
+        layout.addWidget(self.sManualButton,     6, 0)
+        layout.addWidget(self.sManualDSB,        6, 1)
+        topRightGroupBoxS.setLayout(layout)
+
+        layout = QVBoxLayout()
+        layout.addWidget(topRightGroupBoxLambda)
+        layout.addWidget(topRightGroupBoxS)
+
         self.topRightGroupBox.setLayout(layout)
 
     def createBottomLeftTabWidget(self):
         self.bottomLeftTabWidget = QTabWidget()
-        self.bottomLeftTabWidget.setSizePolicy(QSizePolicy.Preferred,
-                QSizePolicy.Ignored)
+        # self.bottomLeftTabWidget.setSizePolicy(QSizePolicy.Preferred,
+                # QSizePolicy.Ignored)
 
         tab1 = QWidget()
-        tableWidget = QTableWidget(10, 10)
+        # tableWidget = QTableWidget(10, 10)
+
+        bottomLeftGroupBoxPower = QGroupBox("Lambda_q (mm)")
+        # self.lambdaLabel = QLabel("&Lambda_q (mm):")
+        self.powerButton = QRadioButton("MM 2011")
+        self.powerDSB = QDoubleSpinBox()
+        self.eichButton = QRadioButton("Eich #15")
+        self.eichDSB = QDoubleSpinBox()
+        self.lambdaManualButton = QRadioButton("Manual")
+        self.lambdaManualDSB = QDoubleSpinBox()
+        self.lambdaManualButton.setChecked(True)
+
+        layout = QGridLayout()
+        # layout.addWidget(self.lambdaLabel,       0, 0, 1, 2)
+        layout.addWidget(self.mmButton,          1, 0)
+        layout.addWidget(self.mmDSB,             1, 1)
+        layout.addWidget(self.eichButton,        2, 0)
+        layout.addWidget(self.eichDSB,           2, 1)
+        layout.addWidget(self.lambdaManualButton,3, 0)
+        layout.addWidget(self.lambdaManualDSB,   3, 1)
+        bottomLeftGroupBoxPower.setLayout(layout)
 
         tab1hbox = QHBoxLayout()
         tab1hbox.setContentsMargins(5, 5, 5, 5)
-        tab1hbox.addWidget(tableWidget)
+        # tab1hbox.addWidget(tableWidget)
+        tab1hbox.addWidget(bottomLeftGroupBoxPower)
         tab1.setLayout(tab1hbox)
 
         tab2 = QWidget()
-        textEdit = QTextEdit()
-
-        textEdit.setPlainText("Twinkle, twinkle, little star,\n"
-                              "How I wonder what you are.\n" 
-                              "Up above the world so high,\n"
-                              "Like a diamond in the sky.\n"
-                              "Twinkle, twinkle, little star,\n" 
-                              "How I wonder what you are!\n")
+        self.textEditData = QTextEdit()
 
         tab2hbox = QHBoxLayout()
         tab2hbox.setContentsMargins(5, 5, 5, 5)
-        tab2hbox.addWidget(textEdit)
+        tab2hbox.addWidget(self.textEditData)
         tab2.setLayout(tab2hbox)
 
-        self.bottomLeftTabWidget.addTab(tab1, "&Table")
-        self.bottomLeftTabWidget.addTab(tab2, "Text &Edit")
+        tab3 = QWidget()
+        self.textEditResources = QTextEdit()
+
+        tab3hbox = QHBoxLayout()
+        tab3hbox.setContentsMargins(5, 5, 5, 5)
+        tab3hbox.addWidget(self.textEditResources)
+        tab3.setLayout(tab3hbox)
+
+        self.bottomLeftTabWidget.addTab(tab1, "&Power")
+        self.bottomLeftTabWidget.addTab(tab2, "Input data")
+        self.bottomLeftTabWidget.addTab(tab3, "Local resources")
 
     def createBottomRightGroupBox(self):
         self.plotPushButton = QPushButton("Default Push Button")
